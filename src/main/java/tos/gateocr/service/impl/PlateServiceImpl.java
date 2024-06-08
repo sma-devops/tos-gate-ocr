@@ -1,6 +1,8 @@
 package tos.gateocr.service.impl;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import tos.gateocr.entity.ReadsEntity;
 import tos.gateocr.mapper.PlateMapper;
@@ -9,6 +11,7 @@ import tos.gateocr.repository.ReadsRepository;
 import tos.gateocr.service.PlateService;
 
 import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -56,16 +59,4 @@ public class PlateServiceImpl implements PlateService {
         }
         return null;
     }
-    
-    @Override
-    public Plate getLastPlateByDate(LocalDateTime date) {
-        LocalDateTime startOfDay = date.toLocalDate().atStartOfDay();
-        LocalDateTime endOfDay = date.toLocalDate().atTime(23, 59, 59);
-        List<ReadsEntity> readsEntities = readsRepository.findByDateRange(startOfDay, endOfDay);
-        if (readsEntities != null && !readsEntities.isEmpty()) {
-            return plateMapper.entityToModel(readsEntities.get(0));
-        }
-        return null;
-    }
-
 }

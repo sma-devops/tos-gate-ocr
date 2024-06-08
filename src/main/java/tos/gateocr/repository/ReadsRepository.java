@@ -23,8 +23,4 @@ public interface ReadsRepository extends JpaRepository<ReadsEntity, Long> {
     List<ReadsEntity> findLatestReads(LocalDateTime limit);
 
     ReadsEntity findFirstByPlateOrderByTimestampLocalDesc(String plate);
-    
-    @Query("SELECT r FROM ReadsEntity r WHERE r.timestampLocal BETWEEN :startDate AND :endDate ORDER BY r.timestampLocal DESC")
-    List<ReadsEntity> findByDateRange(LocalDateTime startDate, LocalDateTime endDate);
-
 }

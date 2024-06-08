@@ -1,4 +1,4 @@
-package tos.gateocr.mapper;
+ package tos.gateocr.mapper;
 
 import tos.gateocr.entity.ReadsEntity;
 import tos.gateocr.model.Plate;
