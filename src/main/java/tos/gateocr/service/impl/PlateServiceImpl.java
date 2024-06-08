@@ -1,8 +1,6 @@
 package tos.gateocr.service.impl;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import tos.gateocr.entity.ReadsEntity;
 import tos.gateocr.mapper.PlateMapper;
@@ -11,7 +9,6 @@ import tos.gateocr.repository.ReadsRepository;
 import tos.gateocr.service.PlateService;
 
 import java.time.LocalDateTime;
-import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
