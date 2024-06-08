@@ -14,6 +14,7 @@ public class PlateMapperImpl implements PlateMapper {
     @Override
     public Plate entityToModel(ReadsEntity readsEntity) {
         Plate plate = new Plate();
+        plate.setId(readsEntity.getId());
         plate.setPlate(readsEntity.getPlate());
         plate.setPlateState(readsEntity.getPlateState());
         plate.setLongitude(readsEntity.getLongitude());

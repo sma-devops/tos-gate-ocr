@@ -1,45 +1,57 @@
 package tos.gateocr.web.controller;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import tos.gateocr.model.Plate;
 import tos.gateocr.service.PlateService;
-
-import java.util.List;
+import tos.gateocr.utils.DateTimeUtils;
 
 @RestController
 public class PlateController {
 
-	@Autowired
-	private PlateService plateService;
+    @Autowired
+    private PlateService plateService;
 
-	@GetMapping("/api/plates/{plate}")
-	public ResponseEntity<Plate> getPlatesByPlate(@PathVariable String plate) {
-		Plate foundPlate = (Plate) plateService.getPlatesByPlate(plate);
-		if (foundPlate != null) {
-			return ResponseEntity.ok(foundPlate);
-		} else {
-			return ResponseEntity.notFound().build();
-		}
-	}
+    @GetMapping("/api/plates/{plate}")
+    public ResponseEntity<List<Plate>> getPlatesByPlate(@PathVariable String plate) {
+        List<Plate> foundPlates = plateService.getPlatesByPlate(plate);
+        if (foundPlates != null && !foundPlates.isEmpty()) {
+            return ResponseEntity.ok(foundPlates);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
-	@GetMapping("/api/plates/{plate}/last")
-	public ResponseEntity<Plate> getLastPlateRead(@PathVariable String plate) {
-		Plate lastPlate = plateService.getLastPlateRead(plate);
-		if (lastPlate != null) {
-			return ResponseEntity.ok(lastPlate);
-		} else {
-			return ResponseEntity.notFound().build();
-		}
-	}
+    @GetMapping("/api/plates/{plate}/last")
+    public ResponseEntity<Plate> getLastPlateRead(@PathVariable String plate) {
+        Plate lastPlate = plateService.getLastPlateRead(plate);
+        if (lastPlate != null) {
+            return ResponseEntity.ok(lastPlate);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
-	@GetMapping("/api/plates/latest")
-	public ResponseEntity<List<Plate>> getLatestPlates(@RequestParam(defaultValue = "10") int limit) {
-		List<Plate> latestPlates = plateService.getLatestPlates(limit);
-		return ResponseEntity.ok(latestPlates);
-	}
+    @GetMapping("/api/plates/latest")
+    public ResponseEntity<Plate> getLatestPlates() {
+        Plate latestPlate = plateService.getLatestPlates();
+        return ResponseEntity.ok(latestPlate);
+    }
+
+    @GetMapping("/api/plates/by-date/{date}")
+    public ResponseEntity<List<Plate>> getLastPlateByDate(@PathVariable String date) {
+        LocalDateTime dateTime = DateTimeUtils.parseStringToLocalDateTime(date, DateTimeUtils.getDefaultFormat());
+        List<Plate> lastPlates = (List<Plate>) plateService.getLastPlateByDate(dateTime);
+        if (lastPlates != null && !lastPlates.isEmpty()) {
+            return ResponseEntity.ok(lastPlates);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

@@ -10,8 +10,6 @@ public class Plate {
 
 	private Float latitude;
 	private String timestampLocal;
-	private String timestampUtc;
-	private String timestampZone;
 
 	// Getters and setters
 	public Integer getId() {
@@ -62,27 +60,10 @@ public class Plate {
 		this.timestampLocal = timestampLocal;
 	}
 
-	public String getTimestampUtc() {
-		return timestampUtc;
-	}
-
-	public void setTimestampUtc(String timestampUtc) {
-		this.timestampUtc = timestampUtc;
-	}
-
-	public String getTimestampZone() {
-		return timestampZone;
-	}
-
-	public void setTimestampZone(String timestampZone) {
-		this.timestampZone = timestampZone;
-	}
-
 	@Override
 	public String toString() {
 		return "Plate{" + "id=" + id + ", plate='" + plate + '\'' + ", plateState='" + plateState + '\''
-				+ ", longitude=" + longitude + ", latitude=" + latitude + ", timestampLocal='" + timestampLocal + '\''
-				+ ", timestampUtc='" + timestampUtc + '\'' + ", timestampZone='" + timestampZone + '\'' + '}';
+				+ ", longitude=" + longitude + ", latitude=" + latitude + ", timestampLocal='" + timestampLocal + '\'' + '}';
 	}
 
 	public void setTimestampLocal(LocalDateTime timestampLocal2) {

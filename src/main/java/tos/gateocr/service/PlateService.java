@@ -1,5 +1,6 @@
 package tos.gateocr.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import tos.gateocr.model.Plate;
@@ -9,5 +10,8 @@ public interface PlateService {
 
 	Plate getLastPlateRead(String plate);
 
-	List<Plate> getLatestPlates(int limit);
+	Plate getLatestPlates();
+	
+	Plate getLastPlateByDate(LocalDateTime date);
+
 }
