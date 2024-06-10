@@ -8,35 +8,41 @@ import org.springframework.web.bind.annotation.RestController;
 import tos.gateocr.model.Plate;
 import tos.gateocr.service.PlateService;
 
+import java.util.List;
+
 @RestController
 public class PlateController {
 
-	@Autowired
-	private PlateService plateService;
+    @Autowired
+    private PlateService plateService;
 
-	@GetMapping("/api/plates/{plate}")
-	public ResponseEntity<Plate> getPlatesByPlate(@PathVariable String plate) {
-		Plate foundPlate = (Plate) plateService.getPlatesByPlate(plate);
-		if (foundPlate != null) {
-			return ResponseEntity.ok(foundPlate);
-		} else {
-			return ResponseEntity.notFound().build();
-		}
-	}
+    @GetMapping("/api/plates/{plate}")
+    public ResponseEntity<List<Plate>> getPlatesByPlate(@PathVariable String plate) {
+        List<Plate> foundPlates = plateService.getPlatesByPlate(plate);
+        if (foundPlates != null && !foundPlates.isEmpty()) {
+            return ResponseEntity.ok(foundPlates);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
-	@GetMapping("/api/plates/{plate}/last")
-	public ResponseEntity<Plate> getLastPlateRead(@PathVariable String plate) {
-		Plate lastPlate = plateService.getLastPlateRead(plate);
-		if (lastPlate != null) {
-			return ResponseEntity.ok(lastPlate);
-		} else {
-			return ResponseEntity.notFound().build();
-		}
-	}
+    @GetMapping("/api/plates/{plate}/last")
+    public ResponseEntity<Plate> getLastPlateRead(@PathVariable String plate) {
+        Plate lastPlate = plateService.getLastPlateRead(plate);
+        if (lastPlate != null) {
+            return ResponseEntity.ok(lastPlate);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
-	@GetMapping("/api/plates/latest")
-	public ResponseEntity<Plate> getLatestPlates() {
-		Plate latestPlate = plateService.getLatestPlates();
-		return ResponseEntity.ok(latestPlate);
-	}
+    @GetMapping("/api/plates/latest")
+    public ResponseEntity<Plate> getLatestPlate() {  // Change method to return the latest single plate
+        Plate latestPlate = plateService.getLatestPlate();
+        if (latestPlate != null) {
+            return ResponseEntity.ok(latestPlate);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
