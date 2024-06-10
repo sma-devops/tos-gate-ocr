@@ -37,7 +37,7 @@ public class PlateController {
     }
 
     @GetMapping("/api/plates/latest")
-    public ResponseEntity<Plate> getLatestPlate() {  // Change method to return the latest single plate
+    public ResponseEntity<Plate> getLatestPlate() {  
         Plate latestPlate = plateService.getLatestPlate();
         if (latestPlate != null) {
             return ResponseEntity.ok(latestPlate);
@@ -45,4 +45,5 @@ public class PlateController {
             return ResponseEntity.notFound().build();
         }
     }
+
 }

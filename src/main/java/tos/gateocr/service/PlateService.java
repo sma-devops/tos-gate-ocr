@@ -9,5 +9,5 @@ public interface PlateService {
 
 	Plate getLastPlateRead(String plate); 
 
-	Plate getLatestPlates();
+	Plate getLatestPlate();
 }

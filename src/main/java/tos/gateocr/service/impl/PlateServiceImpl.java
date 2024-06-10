@@ -43,7 +43,7 @@ public class PlateServiceImpl implements PlateService {
     }
 
     @Override
-    public Plate getLatestPlates() {
+    public Plate getLatestPlate() {
     	/*Calendar cal;
     	cal  = Calendar.getInstance();
     	cal.add(Calendar.MILLISECOND, -lastreadInterval);*/
