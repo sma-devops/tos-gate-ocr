@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 import tos.gateocr.model.Plate;
 import tos.gateocr.service.PlateService;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 @RestController
@@ -16,34 +19,45 @@ public class PlateController {
     @Autowired
     private PlateService plateService;
 
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSSS");
+
     @GetMapping("/api/plates/{plate}")
     public ResponseEntity<List<Plate>> getPlatesByPlate(@PathVariable String plate) {
         List<Plate> foundPlates = plateService.getPlatesByPlate(plate);
-        if (foundPlates != null && !foundPlates.isEmpty()) {
-            return ResponseEntity.ok(foundPlates);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return foundPlates.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(foundPlates);
     }
 
     @GetMapping("/api/plates/{plate}/last")
     public ResponseEntity<Plate> getLastPlateRead(@PathVariable String plate) {
         Plate lastPlate = plateService.getLastPlateRead(plate);
-        if (lastPlate != null) {
-            return ResponseEntity.ok(lastPlate);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return lastPlate != null ? ResponseEntity.ok(lastPlate) : ResponseEntity.notFound().build();
     }
 
     @GetMapping("/api/plates/latest")
-    public ResponseEntity<Plate> getLatestPlate() {  
+    public ResponseEntity<Plate> getLatestPlate() {
         Plate latestPlate = plateService.getLatestPlate();
-        if (latestPlate != null) {
-            return ResponseEntity.ok(latestPlate);
-        } else {
-            return ResponseEntity.notFound().build();
+        return latestPlate != null ? ResponseEntity.ok(latestPlate) : ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/api/plates/last-read-after/{timestamp}")
+    public ResponseEntity<List<Plate>> getPlatesReadAfter(@PathVariable("timestamp") String timestamp) {
+        try {
+            LocalDateTime dateTime = LocalDateTime.parse(timestamp, DATE_TIME_FORMATTER);
+            List<Plate> plates = plateService.getPlatesReadAfter(dateTime);
+            return plates.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(plates);
+        } catch (DateTimeParseException e) {
+            return ResponseEntity.badRequest().build();
         }
     }
 
+    @GetMapping("/api/plates/last-read-same-hour-minute-after/{timestamp}")
+    public ResponseEntity<Plate> getLastPlateReadAfterSameHourMinute(@PathVariable("timestamp") String timestamp) {
+        try {
+            LocalDateTime dateTime = LocalDateTime.parse(timestamp, DATE_TIME_FORMATTER);
+            Plate plate = plateService.getLastPlateReadAfterSameHourMinute(dateTime);
+            return plate != null ? ResponseEntity.ok(plate) : ResponseEntity.notFound().build();
+        } catch (DateTimeParseException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }

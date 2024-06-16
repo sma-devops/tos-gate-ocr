@@ -12,20 +12,47 @@ import java.util.stream.Collectors;
 public class PlateMapperImpl implements PlateMapper {
 
     @Override
-    public Plate entityToModel(ReadsEntity readsEntity) {
+    public Plate entityToModel(ReadsEntity entity) {
+        if (entity == null) {
+            return null;
+        }
+
         Plate plate = new Plate();
-        plate.setId(readsEntity.getId());
-        plate.setPlate(readsEntity.getPlate());
-        plate.setPlateState(readsEntity.getPlateState());
-        plate.setLongitude(readsEntity.getLongitude());
-        plate.setLatitude(readsEntity.getLatitude().floatValue());
-        plate.setTimestampLocal(readsEntity.getTimestampLocal().toString());
+        plate.setId(entity.getId() != null ? entity.getId().intValue() : null);
+        plate.setPlate(entity.getPlate());
+        plate.setPlateState(entity.getPlateState());
+        plate.setLongitude(entity.getLongitude());
+        plate.setLatitude(entity.getLatitude() != null ? entity.getLatitude().floatValue() : null);
+        plate.setTimestampLocal(entity.getTimestampLocal());
+
         return plate;
     }
 
     @Override
-    public List<Plate> entityListToModelArrayList(List<ReadsEntity> readsEntities) {
-        return readsEntities.stream().map(this::entityToModel).collect(Collectors.toList());
+    public ReadsEntity modelToEntity(Plate model) {
+        if (model == null) {
+            return null;
+        }
+
+        ReadsEntity entity = new ReadsEntity();
+        entity.setId(model.getId() != null ? model.getId().longValue() : null);
+        entity.setPlate(model.getPlate());
+        entity.setPlateState(model.getPlateState());
+        entity.setLongitude(model.getLongitude());
+        entity.setLatitude(model.getLatitude() != null ? model.getLatitude().doubleValue() : null);
+        entity.setTimestampLocal(model.getTimestampLocal());
+
+        return entity;
+    }
+
+    @Override
+    public List<Plate> entityListToModelList(List<ReadsEntity> entities) {
+        return entities.stream().map(this::entityToModel).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Plate> entityListToModelArrayList(List<ReadsEntity> entities) {
+        return entities.stream().map(this::entityToModel).collect(Collectors.toList());
     }
 
     @Override
