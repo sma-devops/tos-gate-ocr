@@ -10,6 +10,7 @@ import tos.gateocr.service.PlateService;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -57,13 +58,23 @@ public class PlateServiceImpl implements PlateService {
                             .map(plateMapper::entityToModel)
                             .collect(Collectors.toList());
     }
-
     @Override
     public Plate getLastPlateReadAfterSameHourMinute(LocalDateTime dateTime) {
-        List<ReadsEntity> readsEntities = readsRepository.findAllByTimestampLocalAfterSameHourMinute(dateTime);
-        if (!readsEntities.isEmpty()) {
-            return plateMapper.entityToModel(readsEntities.get(0));
-        }
-        return null;
+        LocalDateTime truncatedDateTime = LocalDateTime.of(
+                dateTime.getYear(), dateTime.getMonth(), dateTime.getDayOfMonth(),
+                dateTime.getHour(), dateTime.getMinute(), 0, 0);
+
+        List<ReadsEntity> readsEntities = readsRepository.findAllByTimestampLocalAfter(truncatedDateTime);
+
+        Optional<ReadsEntity> matchingEntity = readsEntities.stream()
+                .filter(entity -> {
+                    LocalDateTime entityDateTime = entity.getTimestampLocal();
+                    return entityDateTime.getHour() == dateTime.getHour() &&
+                           entityDateTime.getMinute() == dateTime.getMinute();
+                })
+                .findFirst();
+
+        return matchingEntity.map(plateMapper::entityToModel).orElse(null);
     }
+
 }

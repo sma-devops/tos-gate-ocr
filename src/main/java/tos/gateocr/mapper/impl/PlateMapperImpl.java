@@ -35,7 +35,7 @@ public class PlateMapperImpl implements PlateMapper {
         }
 
         ReadsEntity entity = new ReadsEntity();
-        entity.setId(model.getId() != null ? model.getId().longValue() : null);
+        entity.setId(model.getId() != null ? Long.valueOf(model.getId()) : null); // Convert Integer to Long
         entity.setPlate(model.getPlate());
         entity.setPlateState(model.getPlateState());
         entity.setLongitude(model.getLongitude());
