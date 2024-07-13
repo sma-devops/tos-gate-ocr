@@ -53,18 +53,18 @@ public class PlateServiceImpl implements PlateService {
 
     @Override
     public List<Plate> getPlatesReadAfter(LocalDateTime dateTime) {
-        List<ReadsEntity> readsEntities = readsRepository.findAllByTimestampLocalAfter(dateTime);
+        List<ReadsEntity> readsEntities = readsRepository.findAllByTimestampLocalAfterOrderByTimestampLocalDesc(dateTime);
         return readsEntities.stream()
                             .map(plateMapper::entityToModel)
                             .collect(Collectors.toList());
     }
-    @Override
+    /*@Override
     public Plate getLastPlateReadAfterSameHourMinute(LocalDateTime dateTime) {
         LocalDateTime truncatedDateTime = LocalDateTime.of(
                 dateTime.getYear(), dateTime.getMonth(), dateTime.getDayOfMonth(),
                 dateTime.getHour(), dateTime.getMinute(), 0, 0);
 
-        List<ReadsEntity> readsEntities = readsRepository.findAllByTimestampLocalAfter(truncatedDateTime);
+        List<ReadsEntity> readsEntities = readsRepository.findAllByTimestampLocalAfterOrderByTimestampLocalDesc(truncatedDateTime);
 
         Optional<ReadsEntity> matchingEntity = readsEntities.stream()
                 .filter(entity -> {
@@ -75,6 +75,10 @@ public class PlateServiceImpl implements PlateService {
                 .findFirst();
 
         return matchingEntity.map(plateMapper::entityToModel).orElse(null);
-    }
+        if (readsEntities != null && readsEntities.size() > 0)
+        	return plateMapper.entityToModel(readsEntities.get(0));
+        else
+        	return null;
+    }*/
 
 }

@@ -10,5 +10,5 @@ public interface PlateService {
     Plate getLastPlateRead(String plate);
     Plate getLatestPlate();
     List<Plate> getPlatesReadAfter(LocalDateTime dateTime);
-    Plate getLastPlateReadAfterSameHourMinute(LocalDateTime dateTime);
+    //Plate getLastPlateReadAfterSameHourMinute(LocalDateTime dateTime);
 }

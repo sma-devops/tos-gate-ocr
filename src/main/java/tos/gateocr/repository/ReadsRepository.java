@@ -17,5 +17,5 @@ public interface ReadsRepository extends JpaRepository<ReadsEntity, Long> {
     @Query("SELECT r FROM ReadsEntity r WHERE r.timestampLocal > :dateTime ORDER BY r.timestampLocal DESC")
     List<ReadsEntity> findLatestReads(@Param("dateTime") LocalDateTime dateTime);
 
-    List<ReadsEntity> findAllByTimestampLocalAfter(LocalDateTime dateTime);
+    List<ReadsEntity> findAllByTimestampLocalAfterOrderByTimestampLocalDesc(LocalDateTime dateTime);
 }

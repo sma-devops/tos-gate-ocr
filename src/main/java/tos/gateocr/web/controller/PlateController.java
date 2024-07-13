@@ -37,15 +37,16 @@ public class PlateController {
         Plate latestPlate = plateService.getLatestPlate();
         return latestPlate != null ? ResponseEntity.ok(latestPlate) : ResponseEntity.notFound().build();
     }
-
+    
     @GetMapping("/last-read-after/{timestamp}")
-    public ResponseEntity<List<Plate>> getPlatesReadAfter(@PathVariable("timestamp") String timestamp) {
+    public ResponseEntity<Plate> getLastPlateReadAfterSameHourMinute(@PathVariable("timestamp") String timestamp) {
         try {
             LocalDateTime dateTime = LocalDateTime.parse(timestamp.replace("%20", " "), DATE_TIME_FORMATTER);
             List<Plate> plates = plateService.getPlatesReadAfter(dateTime);
-            return plates.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(plates);
+            return plates != null && plates.size() > 0 ? ResponseEntity.ok(plates.get(0)) : ResponseEntity.notFound().build();
         } catch (DateTimeParseException e) {
             return ResponseEntity.badRequest().build();
         }
     }
+
 }
